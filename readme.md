@@ -37,3 +37,7 @@ got to make some gui? maybe with pygame
 11/26 
 lol ok so i dont know/dont want to know pygame that well - so I'll just do the velocity thing 
 im going to find the lat and long average of each file and where they r located --> look in my journal i have notes about how/what im doing
+
+11/28 
+finally pushed to git repo
+.gitignore has all of the data files, so I can actually upload the directory on github
