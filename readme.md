@@ -41,3 +41,17 @@ im going to find the lat and long average of each file and where they r located 
 11/28 
 finally pushed to git repo
 .gitignore has all of the data files, so I can actually upload the directory on github
+
+11/29
+i need a 2d list - height is the len(range of lat values), length is the len(range of long values)
+range of where nonzero values occur
+
+
+leftmost		rightmost
+long 			longitude
+
+[ [a, b, c, d, e, ...], -- highest lat
+  [a1, b1, c1, d1,...],
+  [a2, b2, c2, d2,...],
+  [...]					-- lowest lat
+]
