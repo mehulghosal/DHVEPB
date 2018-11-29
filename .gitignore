@@ -1,0 +1,4 @@
+#ignores the data files so i can actually push to github
+newdata/
+output/
+olddata/
