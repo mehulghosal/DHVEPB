@@ -16,7 +16,7 @@ def readOutputs(files):
 		data.append(f)
 
 #return a map of delta vals- see readme at 11/29
-def createmap():
+def totalDelta():
 	m = [[Data.Data(0, 0, 0, 0) for j in range(501)] for i in range(551)]
 	for f in data:
 		for d in f:
@@ -27,23 +27,47 @@ def createmap():
 
 	return m
 
-def dispMap(m):
-	f = open("map.txt", "w")
+#f1 and f2 are lists of all Data points in a file
+#returns map of change in values at each lat, lon
+def deltaVals(f1, f2):
+	#initializes 2d list 
+	m = [[Data.Data((data.index(f1)+data.index(f2))/2, i, j, 0) for j in range(1, 502)] for i in range(1, 552)]
+	print(len(f1))
+	return m
+
+#go through data list
+#call deltavals for each consecutive pair of frames 
+#store maps in list
+
+def calc():
+	deltamaps = []
+	for i in range(len(data)-2):
+		deltamaps.append(deltaVals(data[i], data[i+1]))
+	return deltamaps
+
+def writeMap(m, name):
+	f = open(str(name), "w")
 	s = ""
-	r = []
 	for i in m:
 		for j in i:
 			s += str(j.val) + " "
-			r.append((pygame.Rect(j.lon + 25, j.lat, 1, 1), j.val))
 		s += "\n"
 	f.write(s)
 	f.close()
 
-	return r
-	
+#takes in map
+#returns list of tueples
+#index 0: pygame.rect objects --> pygame.Rect(x, y, width, height)
+#index 1: value 
+def initRects(m):
+	r = []
+	for i in m:
+		for j in i:
+			r.append((pygame.Rect(j.lon + 25, j.lat + 25, 1, 1), j.val))
+
 def draw(r):
 	pygame.init()
-	size = (601, 551)
+	size = (551, 601)
 	screen = pygame.display.set_mode(size)
 	done = False
 	screen.fill((255, 255, 255))
@@ -68,8 +92,11 @@ if __name__ == "__main__":
 	files = dp.initFiles(directory)
 	files = dp.sortFiles(files)
 	# readFirstFile()
+	print(data)
 	readOutputs(files)
-	draw(dispMap(createmap()))
+	m = calc()
+	for i in m:
+		draw(initRects(m))
 
 	dp.closeFiles(files)
 
