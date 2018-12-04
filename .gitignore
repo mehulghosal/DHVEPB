@@ -4,3 +4,4 @@ output/
 olddata/
 .gitignore.swp
 __pycache__/
+pycache/
