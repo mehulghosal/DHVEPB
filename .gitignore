@@ -3,3 +3,4 @@ newdata/
 output/
 olddata/
 .gitignore.swp
+__pycache__
