@@ -32,8 +32,9 @@ def totalDelta():
 def deltaVals(f1, f2):
 	#initializes 2d list 
 	m = [[Data.Data((data.index(f1)+data.index(f2))/2, i, j, 0) for j in range(1, 502)] for i in range(1, 552)]
-	print(len(f1))
+	# print(len(f1))
 	return m
+
 
 #go through data list
 #call deltavals for each consecutive pair of frames 
@@ -92,8 +93,8 @@ if __name__ == "__main__":
 	files = dp.initFiles(directory)
 	files = dp.sortFiles(files)
 	# readFirstFile()
-	print(data)
 	readOutputs(files)
+	# print(len(data[1]))
 	m = calc()
 	for i in m:
 		draw(initRects(m))
