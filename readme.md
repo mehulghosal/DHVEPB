@@ -1,4 +1,4 @@
-# **Deriving Horizantal Velocities of Equatorial Plasma Bubbles**
+# Deriving Horizantal Velocities of Equatorial Plasma Bubbles
 * goal of this project is to find horizantal drift velocities based on differences in total electron content over time
 * thank you to Dr. R. Pradipta for support and providing the data
 
