@@ -51,7 +51,7 @@ def writeMap(m, name):
 	s = ""
 	for i in m:
 		for j in i:
-			s += str(j.val) + " "
+			s += str(j) + " "
 		s += "\n"
 	f.write(s)
 	f.close()
