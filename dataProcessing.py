@@ -66,23 +66,6 @@ def readData():
 	print("time required is: " + str(time.time() - t))
 	return dataList
 
-#float vals of the first line in the first file
-#returns list values
-def fLfF():
-	global files
-	#first file as string
-	firstFile = files[0]
-
-	#list of all values in first line
-	firstLine = firstFile.readline().split()
-
-	values = []
-	for val in firstLine:
-		x = float(val[:-4])
-		exponent = 10 ** int(val[-3:])
-		values.append(x*exponent)
-	return values
-
 #closes all files to prevent memory leaks
 #param is list of files
 def closeFiles(files):
