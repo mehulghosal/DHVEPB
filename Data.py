@@ -10,3 +10,7 @@ class Data():
 
 	def __str__(self):
 		return str((self.t, self.lat, self.lon, self.val))
+
+	#self and other are from adjacent time frames and same lat/lon
+	def __add__(self, other):
+		return Data((self.t + other.t)/2, self.lat, self.lon, (self.val + other.val)/2)
