@@ -86,7 +86,7 @@ def imdumb():
 
 	b = "/home/mehulghosal/code/sciresearch/out/"
 	for i in range(1, 552):
-		f = open("out" + i + ".txt", "w")
+		f = open("out" + str(i) + ".txt", "w")
 		f.write(a[i-1])
 
 
