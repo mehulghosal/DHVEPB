@@ -1,4 +1,4 @@
-import os, time, Data, pickle
+import os, time, Data
 
 #list of files
 files = []
@@ -8,12 +8,12 @@ dataList = []
 
 #appends datafiles as file objects to list
 #modifies gloabal var files
-def initFiles(directory):
+def initFiles(directory, t = "r"):
 	global files
 	#directory = "/home/mehulghosal/code/sciresearch/newdata"
 	for root, dirs, filenames in os.walk(directory):
 		for f in filenames:
-			file = open(directory+f, "r")
+			file = open(directory+f, t)
 			files.append(file)
 	return files
 
@@ -72,9 +72,29 @@ def closeFiles(files):
 	for file in files:
 		file.close()
 
+#prunes all non-negative values
+def imdumb():
+	#list of everything in output directory
+	files = sortFiles(initFiles("/home/mehulghosal/code/sciresearch/output/"))
+	a = []
+	for f in files:
+		data = f.read().split("\n")[:-1]
+		x = ""
+		for d in data:
+			x += str(Data.Data.fromStr(d)) + "\n"
+		a.append(x)
+
+	b = "/home/mehulghosal/code/sciresearch/out/"
+	for i in range(1, 552):
+		f = open("out" + i + ".txt", "w")
+		f.write(a[i-1])
+
+
 if __name__ == '__main__':
-	
-	initFiles("/home/mehulghosal/code/sciresearch/newdata/")
-	sortFiles(files, direc)
-	
+	t = time.time()
+	# initFiles("/home/mehulghosal/code/sciresearch/newdata/")
+	# sortFiles(files, direc)
+	imdumb()
 	closeFiles(files)
+	print(time.time()- t)
+

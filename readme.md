@@ -7,6 +7,7 @@
 * Each txt file contains 551 lines (each corresponds to different latitude)
 * and each line contains 501 numbers (each column corresponds to different longitude)
 * each value is a TEC reading at that location and time
+	* negative values represent depletions
 
 * note: data in input & output files not published on github because of size limitations
 

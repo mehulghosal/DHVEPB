@@ -14,3 +14,12 @@ class Data():
 	#self and other are from adjacent time frames and same lat/lon
 	def __add__(self, other):
 		return Data((self.t + other.t)/2, self.lat, self.lon, (self.val + other.val)/2)
+
+	#pass in string tuple, returns Data object
+	def fromStr(s):
+		s = s.split(", ")
+		t = int(s[0][-1:])
+		la = int(s[1])
+		lo = int(s[2])
+		v = float(s[3][:-1])
+		return Data(t, la, lo, v)
