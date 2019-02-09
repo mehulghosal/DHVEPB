@@ -81,9 +81,11 @@ def imdumb():
 		data = f.read().split("\n")[:-1]
 		x = ""
 		for d in data:
-			x += str(Data.Data.fromStr(d)) + "\n"
+			da = Data.Data.fromStr(d)
+			if da.val < 0:
+				x += str(da) + "\n"
 		a.append(x)
-		if a.index(x) == 10: break
+		# if a.index(x) == 10: break
 
 	# print(a)
 	b = "/home/mehulghosal/code/sciresearch/out/out"
