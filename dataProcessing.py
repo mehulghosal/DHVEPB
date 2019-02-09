@@ -75,7 +75,7 @@ def closeFiles(files):
 #prunes all non-negative values
 def imdumb():
 	#list of everything in output directory
-	files = sortFiles(initFiles("/home/mehulghosal/code/sciresearch/output/"))
+	files = sortFiles(initFiles(os.getcwd() + "/output/", "r+"))
 	a = []
 	for f in files:
 		data = f.read().split("\n")[:-1]
@@ -83,11 +83,13 @@ def imdumb():
 		for d in data:
 			x += str(Data.Data.fromStr(d)) + "\n"
 		a.append(x)
+		if a.index(x) == 10: break
 
-	b = "/home/mehulghosal/code/sciresearch/out/"
-	for i in range(1, 552):
-		f = open("out" + str(i) + ".txt", "w")
-		f.write(a[i-1])
+	# print(a)
+	b = "/home/mehulghosal/code/sciresearch/out/out"
+	for i in range(len(files)):
+		fi = open(b + str(i) + ".txt", "w")
+		fi.write(a[i])
 
 
 if __name__ == '__main__':
