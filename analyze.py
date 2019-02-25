@@ -1,9 +1,10 @@
 import os, time, Data
 import dataProcessing as dp
 
+directory = os.getcwd() + "/out/"
 
 def init():
-	directory = os.getcwd() + "/out/"
+	global directory
 	files = dp.initFiles(directory)
 	files = dp.sortFiles(files)
 	f = []
@@ -46,7 +47,6 @@ def deltaVals(f1, f2):
 				m[i][j] = d1
 			else:
 				m[i][j] = 0
-
 	return m
 
 def writeMap(m, name):
@@ -59,14 +59,69 @@ def writeMap(m, name):
 	f.write(s)
 	f.close()
 
-def findCorners():
-	pass
+# takes in a file - list of data objects
+# returns 4 data objects - [top left, top right, bottom left, bottom right]
+# assuming longitude increases from west to east & latitude increases from bottom to top
+def findCorners(file):
+	MAXLAT = 0
+	MAXLON = 0
+
+	MINLAT = 551
+	MINLON = 501
+
+	TOPLEFT = file[0]
+	TOPRIGHT = file[0]
+	BOTTOMLEFT = file[0]
+	BOTTOMRIGHT = file[0]
+	print(TOPLEFT)
+	print(TOPRIGHT)
+	print(BOTTOMLEFT)
+	print(BOTTOMRIGHT)
+
+	for data in file:
+		lat = data.lat
+		lon = data.lon
+		latChangeMax = False
+		lonChangeMax = False
+		latChangeMin = False
+		lonChangeMin = False
+
+		if lat >= MAXLAT:
+			MAXLAT = lat
+			latChangeMax = True
+		elif lat <= MINLAT:
+			MINLAT = lat
+			latChangeMin = True
+
+		if lon >= MAXLON:
+			MAXLON = lon
+			lonChangeMax = True
+		elif lon <= MINLON:
+			MINLON = lon
+			lonChangeMin = True
+
+		if latChangeMax:
+			if lonChangeMax:
+				TOPRIGHT = data
+			elif lonChangeMin:
+				TOPLEFT = data
+		elif latChangeMin:
+			if lonChangeMax:
+				BOTTOMRIGHT = data
+			elif lonChangeMin:
+				BOTTOMLEFT = data
+
+	return [TOPLEFT, TOPRIGHT, BOTTOMLEFT, BOTTOMRIGHT]
+
+
 
 
 if __name__ == "__main__":
-	files = dp.initFiles(directory)
-	files = dp.sortFiles(files)
-	# print(files)
+	files = dp.sortFiles(dp.initFiles(directory))
+
+	# linear list of data objects
 	f1 = (read(files[0]))
-	print(f1)
-	
+
+	# list of 4 corners in f1
+	f1Corners = findCorners(f1)
+	for i in f1Corners: print(i)
