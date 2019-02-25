@@ -1,7 +1,15 @@
 import os, time, Data
 import dataProcessing as dp
 
-directory = os.getcwd() + "/output/"
+
+def init():
+	directory = os.getcwd() + "/out/"
+	files = dp.initFiles(directory)
+	files = dp.sortFiles(files)
+	f = []
+	for i in files:
+		f.append(read(i))
+	return f
 
 #reads data of one output file
 #return map from that file
@@ -37,7 +45,7 @@ def deltaVals(f1, f2):
 			elif d2 ==0:
 				m[i][j] = d1
 			else:
-				m[i][j] = d1 + d2
+				m[i][j] = 0
 
 	return m
 
@@ -51,10 +59,14 @@ def writeMap(m, name):
 	f.write(s)
 	f.close()
 
+def findCorners():
+	pass
+
 
 if __name__ == "__main__":
 	files = dp.initFiles(directory)
 	files = dp.sortFiles(files)
-
-	f1 = read(files[0])
+	# print(files)
+	f1 = (read(files[0]))
+	print(f1)
 	
