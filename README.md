@@ -19,7 +19,7 @@
 ### analyzing
 * read in data objects again from output
 * create a map of the values
-* then find delta TEC between th frames
+* then find delta TEC between the frames
 	* past trouble involved memory overloading - only load in some files at a time to find differences
 	* Dr. P also mentioned to look at library he sent me
 		* https://dtcwt.readthedocs.io/en/0.12.0/registration.html#using-the-implementation
