@@ -1,5 +1,7 @@
 import os, time, Data
 import dataProcessing as dp
+import numpy as np
+import matplotlib.pyplot as plt
 
 directory = os.getcwd() + "/out/"
 
@@ -10,58 +12,35 @@ def init():
 	f = []
 	for i in files:
 		f.append(read(i))
-	return f
+	return np.asarray(f)
 
 #reads data of one output file
-#return map from that file
+#return list of data objects and 2d list of values
 def read(file):
 	inp = file.read().split("\n")[:-1]
 	data = []
 	for line in inp:
 		data.append(Data.Data.fromStr(line))
-	return data
+
+	dataArray = np.array(data)
+	dataMap = formatMap(dataArray)
+
+	return dataArray, dataMap
 
 #formats a list of data objects into a 2d map
 #returns 2d list
 def formatMap(data):
-	m = [[0 for j in range(501)] for i in range(551)]
-	for i in range(len(data)):
-		d = data[i]
-		m[d.lat][d.lon] = d
+	m = np.empty([551, 501], float)
+	for d in data:
+		m[d.lat-1][d.lon-1] = d.val
 	return m
 
-#f1 and f2 are maps (returned from formatMap()) of all Data points in a file
-#returns map of change in values at each lat, lon
-def deltaVals(f1, f2):
-	#initializes 2d list 
-	m = f1
-	for i in range(551):
-		for j in range(501):
-			d1 = f1[i][j]
-			d2 = f2[i][j]
-			if d1 == 0 and d2 == 0:
-				pass
-			elif d1 == 0:
-				m[i][j] = d2
-			elif d2 ==0:
-				m[i][j] = d1
-			else:
-				m[i][j] = 0
-	return m
-
-def writeMap(m, name):
-	f = open(str(name), "w")
-	s = ""
-	for i in m:
-		for j in i:
-			s += str(j) + " "
-		s += "\n"
-	f.write(s)
-	f.close()
-
-# takes in a file - list of data objects
-# returns 4 data objects - [top left, top right, bottom left, bottom right]
-# assuming longitude increases from west to east & latitude increases from bottom to top
+#takes in dataMap and makes a heatmap
+def heatMap(dataMap):
+	plt.imshow(dataMap, cmap='hot', interpolation='nearest')
+	plt.show()
+	
+# use harris corner detection
 def findCorners(file):
 	MAXLAT = 0
 	MAXLON = 0
@@ -120,8 +99,9 @@ if __name__ == "__main__":
 	files = dp.sortFiles(dp.initFiles(directory))
 
 	# linear list of data objects
-	f1 = (read(files[0]))
+	data, dataMap = (read(files[0]))
+	heatMap(dataMap)
 
 	# list of 4 corners in f1
-	f1Corners = findCorners(f1)
-	for i in f1Corners: print(i)
+	# f1Corners = findCorners(f1)
+	# for i in f1Corners: print(i)
