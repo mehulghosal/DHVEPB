@@ -1,4 +1,4 @@
-import os, time, Data
+import os, time, Data, cv2
 import dataProcessing as dp
 import numpy as np
 import matplotlib.pyplot as plt
@@ -37,63 +37,25 @@ def formatMap(data):
 
 #takes in dataMap and makes a heatmap
 def heatMap(dataMap):
-	plt.imshow(dataMap, cmap='hot', interpolation='nearest')
+	t = time.time()
+	plt.imshow(dataMap, cmap='gray', interpolation='nearest')
+	t = time.time() - t
 	plt.show()
 	
-# use harris corner detection
-def findCorners(file):
-	MAXLAT = 0
-	MAXLON = 0
-
-	MINLAT = 551
-	MINLON = 501
-
-	TOPLEFT = file[0]
-	TOPRIGHT = file[0]
-	BOTTOMLEFT = file[0]
-	BOTTOMRIGHT = file[0]
-	print(TOPLEFT)
-	print(TOPRIGHT)
-	print(BOTTOMLEFT)
-	print(BOTTOMRIGHT)
-
-	for data in file:
-		lat = data.lat
-		lon = data.lon
-		latChangeMax = False
-		lonChangeMax = False
-		latChangeMin = False
-		lonChangeMin = False
-
-		if lat >= MAXLAT:
-			MAXLAT = lat
-			latChangeMax = True
-		elif lat <= MINLAT:
-			MINLAT = lat
-			latChangeMin = True
-
-		if lon >= MAXLON:
-			MAXLON = lon
-			lonChangeMax = True
-		elif lon <= MINLON:
-			MINLON = lon
-			lonChangeMin = True
-
-		if latChangeMax:
-			if lonChangeMax:
-				TOPRIGHT = data
-			elif lonChangeMin:
-				TOPLEFT = data
-		elif latChangeMin:
-			if lonChangeMax:
-				BOTTOMRIGHT = data
-			elif lonChangeMin:
-				BOTTOMLEFT = data
-
-	return [TOPLEFT, TOPRIGHT, BOTTOMLEFT, BOTTOMRIGHT]
-
-
-
+	print(t)
+	
+# use harris corner detection/Shi-Tomasi Corner Detector
+# https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_feature2d/py_shi_tomasi/py_shi_tomasi.html
+# https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_feature2d/py_features_harris/py_features_harris.html
+def findCorners(dataMap):
+	gray = cv2.cvtColor(dataMap,cv2.COLOR_BGR2GRAY)
+	gray = np.float32(gray)
+	dst = cv2.cornerHarris(gray,2,3,0.04) #what do these numbers mean? we may never know
+	# Threshold for an optimal value, it may vary depending on the image.
+	img[dataMap>0.01*dst.max()] = [0,0,255]
+	cv2.imshow('dst',dataMap)
+	if cv2.waitKey(0) & 0xff == 27:
+		cv2.destroyAllWindows()
 
 if __name__ == "__main__":
 	files = dp.sortFiles(dp.initFiles(directory))
@@ -101,6 +63,7 @@ if __name__ == "__main__":
 	# linear list of data objects
 	data, dataMap = (read(files[0]))
 	heatMap(dataMap)
+	# findCorners(dataMap)
 
 	# list of 4 corners in f1
 	# f1Corners = findCorners(f1)
