@@ -37,20 +37,25 @@ def formatMap(data):
 
 #takes in dataMap and makes a heatmap
 def heatMap(dataMap):
-	t = time.time()
 	plt.imshow(dataMap, cmap='gray', interpolation='nearest')
-	t = time.time() - t
 	plt.show()
-	
-	print(t)
-	
+		
+# map values to be between 0-255 for colors
+# return number between 0-255
+def mapRange(dataMap):
+	new = np.empty([551, 501], float)
+	for row in range(len(dataMap)):
+		for i in range(len(dataMap[0])):
+			new[row][i] = abs(dataMap[row][i])
+	return new
+
 # use harris corner detection/Shi-Tomasi Corner Detector
 # https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_feature2d/py_shi_tomasi/py_shi_tomasi.html
 # https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_feature2d/py_features_harris/py_features_harris.html
 def findCorners(dataMap):
-	gray = cv2.cvtColor(dataMap,cv2.COLOR_BGR2GRAY)
-	gray = np.float32(gray)
-	dst = cv2.cornerHarris(gray,2,3,0.04) #what do these numbers mean? we may never know
+	# gray = cv2.cvtColor(dataMap,cv2.COLOR_BGR2GRAY)
+	# gray = np.float32(gray)
+	dst = cv2.cornerHarris(dataMap,2,3,0.04) #what do these numbers mean? we may never know
 	# Threshold for an optimal value, it may vary depending on the image.
 	img[dataMap>0.01*dst.max()] = [0,0,255]
 	cv2.imshow('dst',dataMap)
@@ -62,9 +67,11 @@ if __name__ == "__main__":
 
 	# linear list of data objects
 	data, dataMap = (read(files[0]))
-	heatMap(dataMap)
-	# findCorners(dataMap)
+	newMap = mapRange(dataMap)
+	
+	cv2.imshow('dataMap',dataMap)
+	cv2.imshow("newMap", newMap)
+	if cv2.waitKey(0) & 0xff == 27:
+		cv2.destroyAllWindows()
 
-	# list of 4 corners in f1
-	# f1Corners = findCorners(f1)
-	# for i in f1Corners: print(i)
+
