@@ -89,7 +89,7 @@ def AAAAAAAA(dataMap):
 	corners = cv2.cornerSubPix(gray,np.float32(centroids),(5,5),(-1,-1),criteria)
 
 	print(len(corners))
-
+	return corners
 	# Now draw them
 	# res = np.hstack((centroids,corners))
 	# res = np.int0(res)
@@ -105,13 +105,14 @@ if __name__ == "__main__":
 	files = dp.sortFiles(dp.initFiles(directory))
 
 	# linear list of data objects
-	data, dataMap = (read(files[10]))
+	data, dataMap = (read(files[0]))
 	newMap = mapRange(dataMap)
 
-	for i in files:
-		d, dm = read(i)
-		nm = mapRange(dm)
-		x = AAAAAAAA(nm)
+	x = AAAAAAAA(newMap)
+	# for i in files:
+	# 	d, dm = read(i)
+	# 	nm = mapRange(dm)
+	# 	x = findCorners(nm)
 
 	# cv2.imshow('newmap',newMap)
 	# if cv2.waitKey(0) & 0xff == 27:
