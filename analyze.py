@@ -5,14 +5,18 @@ import matplotlib.pyplot as plt
 
 directory = os.getcwd() + "/out/"
 
-def init():
-	global directory
-	files = dp.initFiles(directory)
-	files = dp.sortFiles(files)
-	f = []
-	for i in files:
-		f.append(read(i))
-	return np.asarray(f)
+def main():
+	files = dp.sortFiles(dp.initFiles(directory))
+
+	# list of data objects
+	data, dataMap = (read(files[2]))
+	# newMap = mapRange(dataMap)
+
+	# x = AAAAAAAA(newMap)
+	# for i in files:
+	# 	d, dm = read(i)
+	# 	nm = mapRange(dm)
+	# 	x = findCorners(nm)
 
 #reads data of one output file
 #return list of data objects and 2d list of values
@@ -35,7 +39,7 @@ def formatMap(data):
 		m[d.lat-1][d.lon-1] = d.val
 	return m
 
-#takes in dataMap and makes a heatmap
+#takes in dataMap and makes a heatMap
 def heatMap(dataMap):
 	plt.imshow(dataMap, cmap='gray', interpolation='nearest')
 	plt.show()
@@ -66,9 +70,7 @@ def findCorners(dataMap):
 	# Threshold for an optimal value, it may vary depending on the image.
 	img[dst>0.01*dst.max()]=[255]
 
-	cv2.imshow('dst',img)
-	if cv2.waitKey(0) & 0xff == 27:
-		cv2.destroyAllWindows()
+	display(img)
 
 #this is the subpixel accuracy thing
 def AAAAAAAA(dataMap):
@@ -89,33 +91,18 @@ def AAAAAAAA(dataMap):
 	corners = cv2.cornerSubPix(gray,np.float32(centroids),(5,5),(-1,-1),criteria)
 
 	print(len(corners))
-	return corners
 	# Now draw them
-	# res = np.hstack((centroids,corners))
-	# res = np.int0(res)
-	# img[res[:,1],res[:,0]]=[255]
-	# img[res[:,3],res[:,2]] = [255]
-	# cv2.imshow('dst',img)
-	# if cv2.waitKey(0) & 0xff == 27:
-	# 	cv2.destroyAllWindows()
-
+	res = np.hstack((centroids,corners))
+	res = np.int0(res)
+	img[res[:,1],res[:,0]]=[255]
+	img[res[:,3],res[:,2]] = [255]
+	display(img)
 	return corners
+
+def display(img, name="img"):
+	cv2.imshow(name, img)
+	if cv2.waitKey(0) & 0xff == 27:
+		cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-	files = dp.sortFiles(dp.initFiles(directory))
-
-	# linear list of data objects
-	data, dataMap = (read(files[0]))
-	newMap = mapRange(dataMap)
-
-	x = AAAAAAAA(newMap)
-	# for i in files:
-	# 	d, dm = read(i)
-	# 	nm = mapRange(dm)
-	# 	x = findCorners(nm)
-
-	# cv2.imshow('newmap',newMap)
-	# if cv2.waitKey(0) & 0xff == 27:
-	# 	cv2.destroyAllWindows()
-
-	#ok so newmap can be interpreted as an image, but cvtColor doesnt work
+	main()
