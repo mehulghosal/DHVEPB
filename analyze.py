@@ -19,6 +19,10 @@ def read(file):
 
 	return dataArray, dataMap
 
+# takes in a dataMap and saves it as a cv2 image
+def saveAsImage(img, name):
+	cv2.imwrite(directory[:-1] + "imgs/img" + str(name) + ".png",img)
+
 #formats a list of data objects into a 2d map
 #returns 2d list
 def formatMap(data):
@@ -64,10 +68,13 @@ if __name__ == "__main__":
 	# list of data objects
 	data, dataMap = (read(files[0]))
 
-	display(dataMap)
-	gray = cv2.cvtColor(dataMap,cv2.COLOR_BGR2GRAY)
+	for i in range(len(files)):
+		_, m = read(files[i])
+		saveAsImage(m, i)
+
+	# display(dataMap)
+	# gray = cv2.cvtColor(dataMap,cv2.COLOR_BGR2GRAY)
 	# findCorners(dataMap)
 
 	# close files
-	openfiles = [files[0]]
-	closeFiles(openfiles)
+	closeFiles(files)

@@ -4,3 +4,4 @@ out/
 olddata/
 __pycache__/
 *.pyc
+outimgs/
