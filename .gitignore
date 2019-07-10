@@ -1,7 +1,6 @@
 #ignores the data files so i can actually push to github
-newdata/
+data/
 out/
-olddata/
 __pycache__/
 *.pyc
-outimgs/
+imgs/
