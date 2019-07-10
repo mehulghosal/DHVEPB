@@ -1,6 +1,6 @@
 import os, time, Data, cv2
 import dataProcessing as dp
-from dataProcessing import closeFiles
+import optical_flow as flow
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -9,6 +9,7 @@ directory = os.getcwd() + "/out/"
 #reads data of one output file
 #return list of data objects and 2d list of values
 def read(file):
+	file = open(file, "r")
 	inp = file.read().split("\n")[:-1]
 	data = []
 	for line in inp:
@@ -45,9 +46,6 @@ if __name__ == "__main__":
 	# list of data objects
 	data, dataMap = (read(files[0]))
 
-	heatMap(dataMap)
-	# gray = cv2.cvtColor(dataMap,cv2.COLOR_BGR2GRAY)
-	hcd(dataMap)
-
+	
 	# close files
-	closeFiles(files)
+	dp.closeFiles(files)

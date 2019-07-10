@@ -1,4 +1,5 @@
-import os, time, Data
+import os, time, Data, _thread
+from os.path import isfile, join
 
 #list of files
 files = []
@@ -11,44 +12,33 @@ dataList = []
 def initFiles(directory, t = "r"):
 	global files
 	#directory = "/home/mehulghosal/code/sciresearch/newdata"
-	for root, dirs, filenames in os.walk(directory):
-		for f in filenames:
-			file = open(directory+f, t)
-			files.append(file)
+	files = [f for f in os.listdir(directory) if isfile(join(directory, f))]
 	return files
 
 #sorts files in numeric order 1-480
-def sortFiles(files):
-	newList = []
-	for f in files:
-		newList.append(str(f).split("'")[1])
-	#this is a list of file names as strings
-	newList.sort()
-	closeFiles(files)
-	files = []
-	#re-adds each file into files in alphabetical order
-	for fname in newList:
-		#fname is in format: "<_io.TextIOWrapper name='newdata/dtec2dmap_11344_epoch467.txt' mode='r' encoding='UTF-8'>"
-		#name = fname[33:-28] #this splices fname --> "newdata....txt"
-		files.append(open(fname, "r"))
-	#this should leave files as sorted
-
+def sortFiles(files, start=8, end=10):
+	files.sort(key = lambda x: int(x[start:end]))
 	return files
 
 #appends the 130,000,000 data objects to dataList
 #and writes to output files
-def readData():
-	global dataList, files
+def readData(f):
+	files = f
 	#iterates through files
 	t = time.time()
-	for fileIndex in range(len(files)):
+	for fileIndex in range(100):
 		if fileIndex != 249: continue
-		file = files[fileIndex]
-		#list of strings of each lines
+		file = open("./newdata"+files[fileIndex], 'r')
+		print(file)
 		lines = file.readlines()
-		#if fileIndex < 414: continue
+		print(lines)
 
-		outFile = open("/home/mehulghosal/code/sciresearch/output/out" + str(fileIndex+1) + ".txt", "w")
+		a = str(fileIndex+1)
+		if len(a)<10:
+			a = "00" + a
+		else:
+			a = "0" + a
+		outFile = open("./out" + a + ".txt", "w")
 		for lineIndex in range(len(lines)):
 			line = lines[lineIndex]
 			values = line.split()
@@ -56,7 +46,7 @@ def readData():
 			for valIndex in range(len(values)):
 				val = values[valIndex]
 				x = float(val[:-4])
-				if x == 0: continue
+				if x >= 0: continue
 				exp = 10**int(val[-3:])
 				#adding one to all indices to eliminate 0, and go up to 480
 				data = Data.Data(fileIndex + 1, lineIndex + 1, valIndex + 1, x*exp)
@@ -73,32 +63,35 @@ def closeFiles(files):
 		file.close()
 
 #prunes all non-negative values
-def imdumb():
+def imdumb(l):
 	#list of everything in output directory
-	files = sortFiles(initFiles(os.getcwd() + "/output/", "r+"))
+	files = initFiles("./out")
 	a = []
+	c=0
 	for f in files:
-		data = f.read().split("\n")[:-1]
+		# if not c%2==l: continue
+		c+=1
+		fi = open('./out/'+f)
+		data = fi.read().split("\n")[:-1]
+		print(data)
 		x = ""
 		for d in data:
 			da = Data.Data.fromStr(d)
 			if da.val < 0:
 				x += str(da) + "\n"
 		a.append(x)
-		# if a.index(x) == 10: break
 
 	# print(a)
-	b = "/home/mehulghosal/code/sciresearch/out/out"
 	for i in range(len(files)):
-		fi = open(b + str(i) + ".txt", "w")
+		# if not i%2==l: continue
+		t = str(i)
+		if len(t) == 1:
+			t = "00"+t
+		elif len(a) == 2:
+			t = "0" +t
+		fi = open('./out/out' + t + ".txt", "w")
 		fi.write(a[i])
 
-
 if __name__ == '__main__':
-	t = time.time()
-	# initFiles("/home/mehulghosal/code/sciresearch/newdata/")
-	# sortFiles(files, direc)
-	imdumb()
-	closeFiles(files)
-	print(time.time()- t)
-
+	imdumb(1)
+	print("done")
