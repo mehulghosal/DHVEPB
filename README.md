@@ -1,6 +1,6 @@
 ## Deriving Horizantal Velocities of Equatorial Plasma Bubbles
 * goal of this project is to find horizantal drift velocities based on differences in total electron content over time
-* thank you to Dr. R. Pradipta for support and providing the data
+* acknowledgements to Dr. R. Pradipta for support and providing the data
 
 ### data:
 * 480 txt files (each corresponds to a point in time)
@@ -18,10 +18,5 @@
 
 ### analyzing
 * read in data objects again from output
-* create a heatmap of the values
-* then find delta TEC between the frames
-	* past trouble involved memory overloading - only load in some files at a time to find differences
-	* Dr. P also mentioned to look at library he sent me
-		* https://dtcwt.readthedocs.io/en/0.12.0/registration.html#using-the-implementation
-* new approach: detect corners of depletions - track the rate of change in these
-
+* generate images basde on files
+* using optical flow to give motion vectors to images ~ treat like a video
