@@ -1,8 +1,9 @@
 import os, time, Data, cv2
-import dataProcessing as dp
 import numpy as np
 import matplotlib.pyplot as plt
 from optical_flow import flow
+from img_registration import register
+from dataProcessing import *
 
 directory = os.getcwd() + "/out/"
 
@@ -20,35 +21,30 @@ def read(file):
 
 	return dataArray, dataMap
 
-# takes in a dataMap and saves it as a cv2 image
-def saveAsImage(img, name):
-	cv2.imwrite(directory[:-1] + "imgs/img" + str(name) + ".png",img)
-
 #formats a list of data objects into a 2d map
 #returns 2d list
 def formatMap(data):
-	m = np.empty([551, 501], float)
+	m = np.empty([551, 501, 3], dtype=np.uint8)
 	for d in data:
-		m[d.lat-1][d.lon-1] = abs(d.val) * 2550
-		# m[d.lat-1][d.lon-1][1] = abs(d.val)
-		# m[d.lat-1][d.lon-1][2] = abs(d.val)
+		if d.val * 255 < -4:
+			for i in range(3):
+				m[551-(d.lat+1)][501-(d.lon+1)][i] = abs(d.val) * 255
 	return m
-
-def display(img, name="img"):
-	cv2.imshow(name, img)
-	if cv2.waitKey(0) & 0xff == 27:
-		cv2.destroyAllWindows()
 
 if __name__ == "__main__":
 
 	# just list of file names
-	files = dp.sortFiles(dp.initFiles(directory))
+	files = sortFiles(initFiles(directory))
 
 	# list of data objects
 	data, dataMap = (read(files[0]))
 
 	imgs = []
-	for i in range(60): 
+	for i in range(len(files)): 
 		imgs.append(read(files[i])[1])
 
-	flow(imgs)
+	first_frame, last_frame, overlay = flow(imgs)
+	display(first_frame, name="first frame")
+	display(last_frame, name="last frame")
+	display(overlay, name="overlay")
+	save(overlay, "last.png")
