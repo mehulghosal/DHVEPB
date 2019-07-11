@@ -31,23 +31,16 @@ def display(img, name="img"):
 
 #appends the 130,000,000 data objects to dataList
 #and writes to output files
-def readData(f):
-	files = f
+def readData(files):
 	#iterates through files
 	t = time.time()
-	for fileIndex in range(100):
-		if fileIndex != 249: continue
-		file = open("./newdata"+files[fileIndex], 'r')
+	for fileIndex in range(len(files)):
+		# if fileIndex != 249: continue
+		file = open("./data/"+files[fileIndex], 'r')
 		print(file)
 		lines = file.readlines()
-		print(lines)
 
-		a = str(fileIndex+1)
-		if len(a)<10:
-			a = "00" + a
-		else:
-			a = "0" + a
-		outFile = open("./out" + a + ".txt", "w")
+		outFile = open("./out/" + files[fileIndex][-7:-4] + ".txt", "w")
 		for lineIndex in range(len(lines)):
 			line = lines[lineIndex]
 			values = line.split()
@@ -61,7 +54,6 @@ def readData(f):
 				data = Data.Data(fileIndex + 1, lineIndex + 1, valIndex + 1, x*exp)
 				dataList.append(data)
 				outFile.write(str(data) + "\n")
-		print(fileIndex)
 	print("time required is: " + str(time.time() - t))
 	return dataList
 
@@ -100,5 +92,5 @@ def imdumb(l):
 		fi.write(a[i])
 
 if __name__ == '__main__':
-	imdumb(1)
-	print("done")
+	files = sortFiles(initFiles('./data/'), start=-7, end=-4)
+	readData(files)
