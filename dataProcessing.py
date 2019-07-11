@@ -1,4 +1,4 @@
-import os, time, Data, _thread
+import os, time, Data, _thread, cv2
 from os.path import isfile, join
 
 #list of files
@@ -22,7 +22,7 @@ def sortFiles(files, start=4, end=-4):
 
 # takes in a dataMap and saves it as a cv2 image
 def save(img, name):
-	cv2.imwrite(directory[:-1] + "imgs/img" + str(name) + ".png",img)
+	cv2.imwrite("./imgs/img" + str(name) + ".png",img)
 
 def display(img, name="img"):
 	cv2.imshow(name, img)

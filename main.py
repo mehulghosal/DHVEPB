@@ -2,8 +2,8 @@ import os, time, Data, cv2
 import numpy as np
 import matplotlib.pyplot as plt
 from optical_flow import flow
-from img_registration import register
 from dataProcessing import *
+from img_reg import *
 
 directory = os.getcwd() + "/out/"
 
@@ -26,9 +26,9 @@ def read(file):
 def formatMap(data):
 	m = np.empty([551, 501, 3], dtype=np.uint8)
 	for d in data:
-		if d.val * 255 < -4:
-			for i in range(3):
-				m[551-(d.lat+1)][501-(d.lon+1)][i] = abs(d.val) * 255
+		# if abs(d.val) < .4: d.val = 0
+		for i in range(3):
+			m[551-(d.lat+1)][d.lon-1][i] = abs(d.val) * 100
 	return m
 
 if __name__ == "__main__":
@@ -40,11 +40,11 @@ if __name__ == "__main__":
 	data, dataMap = (read(files[0]))
 
 	imgs = []
-	for i in range(len(files)): 
+	for i in range(10): 
 		imgs.append(read(files[i])[1])
-
-	first_frame, last_frame, overlay = flow(imgs)
-	display(first_frame, name="first frame")
-	display(last_frame, name="last frame")
-	display(overlay, name="overlay")
-	save(overlay, "last.png")
+		display(imgs[i], name=str(i))
+	# first_frame, last_frame, overlay = flow(imgs)
+	# display(first_frame, name="first frame")
+	# display(last_frame, name="last frame")
+	# display(overlay, name="overlay")
+	# save(overlay, "last.png")

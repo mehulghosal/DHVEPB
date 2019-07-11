@@ -1,5 +1,6 @@
 import cv2, _thread
 import numpy as np
+from dataProcessing import save, display
 
 # not working exactly with a video - working with list of files
 # cap is list of image files
@@ -27,12 +28,6 @@ def flow(cap):
         k = cv2.waitKey(30) & 0xff
         if k == 27:
             break
-
-        a = str(i)
-        if len(a)   < 10:  a = '00'+a
-        elif len(a) < 100: a = '0' +a
-        cv2.imwrite("/imgs/img" + a + ".png",rgb)
-        print(a)
 
         prvs = nextt
 
