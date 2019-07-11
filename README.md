@@ -20,3 +20,4 @@
 * read in data objects again from output
 * generate images basde on files
 * using optical flow to give motion vectors to images ~ treat like a video
+* color correlates to direction: blue is left, red is right, green is up, purple is down
