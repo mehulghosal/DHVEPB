@@ -1,15 +1,15 @@
 import os, time, Data, cv2
 import dataProcessing as dp
-import optical_flow as flow
 import numpy as np
 import matplotlib.pyplot as plt
+from optical_flow import flow
 
 directory = os.getcwd() + "/out/"
 
 #reads data of one output file
 #return list of data objects and 2d list of values
 def read(file):
-	file = open(file, "r")
+	file = open(directory+file, "r")
 	inp = file.read().split("\n")[:-1]
 	data = []
 	for line in inp:
@@ -27,11 +27,11 @@ def saveAsImage(img, name):
 #formats a list of data objects into a 2d map
 #returns 2d list
 def formatMap(data):
-	m = np.empty([551, 501, 3], float)
+	m = np.empty([551, 501], float)
 	for d in data:
-		m[d.lat-1][d.lon-1][0] = abs(d.val)
-		m[d.lat-1][d.lon-1][1] = abs(d.val)
-		m[d.lat-1][d.lon-1][2] = abs(d.val)
+		m[d.lat-1][d.lon-1] = abs(d.val) * 2550
+		# m[d.lat-1][d.lon-1][1] = abs(d.val)
+		# m[d.lat-1][d.lon-1][2] = abs(d.val)
 	return m
 
 def display(img, name="img"):
@@ -41,11 +41,14 @@ def display(img, name="img"):
 
 if __name__ == "__main__":
 
+	# just list of file names
 	files = dp.sortFiles(dp.initFiles(directory))
 
 	# list of data objects
 	data, dataMap = (read(files[0]))
 
-	
-	# close files
-	dp.closeFiles(files)
+	imgs = []
+	for i in range(60): 
+		imgs.append(read(files[i])[1])
+
+	flow(imgs)

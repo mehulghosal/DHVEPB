@@ -16,7 +16,7 @@ def initFiles(directory, t = "r"):
 	return files
 
 #sorts files in numeric order 1-480
-def sortFiles(files, start=8, end=10):
+def sortFiles(files, start=4, end=-4):
 	files.sort(key = lambda x: int(x[start:end]))
 	return files
 
@@ -65,31 +65,29 @@ def closeFiles(files):
 #prunes all non-negative values
 def imdumb(l):
 	#list of everything in output directory
-	files = initFiles("./out")
+	files = initFiles("./out/")
 	a = []
-	c=0
 	for f in files:
-		# if not c%2==l: continue
-		c+=1
-		fi = open('./out/'+f)
+		fi = open('./out/'+f, 'r+')
 		data = fi.read().split("\n")[:-1]
-		print(data)
 		x = ""
 		for d in data:
 			da = Data.Data.fromStr(d)
 			if da.val < 0:
 				x += str(da) + "\n"
+		os.remove('./out/'+f)
 		a.append(x)
+		# if a.index(x) == 10: break
 
 	# print(a)
+	
 	for i in range(len(files)):
-		# if not i%2==l: continue
-		t = str(i)
-		if len(t) == 1:
-			t = "00"+t
-		elif len(a) == 2:
-			t = "0" +t
-		fi = open('./out/out' + t + ".txt", "w")
+		y = str(i)
+		if len(y)==1: 
+			y='00'+y
+		elif len(y)==2: 
+			y='0'+y
+		fi = open('./out/out' + y + ".txt", "w")
 		fi.write(a[i])
 
 if __name__ == '__main__':
