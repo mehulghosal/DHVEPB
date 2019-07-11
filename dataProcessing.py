@@ -20,6 +20,15 @@ def sortFiles(files, start=4, end=-4):
 	files.sort(key = lambda x: int(x[start:end]))
 	return files
 
+# takes in a dataMap and saves it as a cv2 image
+def save(img, name):
+	cv2.imwrite(directory[:-1] + "imgs/img" + str(name) + ".png",img)
+
+def display(img, name="img"):
+	cv2.imshow(name, img)
+	if cv2.waitKey(0) & 0xff == 27:
+		cv2.destroyAllWindows()
+
 #appends the 130,000,000 data objects to dataList
 #and writes to output files
 def readData(f):
