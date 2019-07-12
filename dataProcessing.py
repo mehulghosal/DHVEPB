@@ -17,8 +17,8 @@ def initFiles(directory):
 	return files
 
 #sorts files in numeric order 1-480
-def sortFiles(files, start=4, end=-4):
-	files.sort(key = lambda x: int(x[start:end]))
+def sortFiles(files, start=4, end=-4, r=False):
+	files.sort(key = lambda x: int(x[start:end]), reverse=r)
 	return files
 
 # takes in a dataMap and saves it as a cv2 image

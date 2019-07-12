@@ -3,10 +3,10 @@
 * acknowledgements to Dr. R. Pradipta for support and providing the data
 
 ### data:
-* 480 txt files (each corresponds to a point in time 3 mins apart)
-* Each txt file contains 551 lines (each corresponds to different latitude)
-* and each line contains 501 numbers (each column corresponds to different longitude)
-* each value is a TEC reading at that location and time
+* 480 txt files (each corresponds to a point in time; increment 3 mins apart)
+* Each txt file contains 551 lines (each corresponds to different latitude; increment by 0.2°)
+* and each line contains 501 numbers (each column corresponds to different longitude; increment by 0.2°)
+* each value is a TEC reading at that location and time; one unit is 10<sup>16</sup> electrons/m<sup>1</sup>
 	* negative values represent depletions
 
 * note: data in input & output files not published on github because of size limitations

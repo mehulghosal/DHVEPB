@@ -28,9 +28,9 @@ def formatMap(data, cr=False):
 	for d in data:
 		if abs(d.val)>50: 
 			d.set_val(0)
-		mult = 20
+		mult = 35
 		for i in range(3):
-			m[d.lat-1][501-d.lon-1][i] = abs(d.val) * mult
+			m[501-d.lat-1][d.lon-1][i] = abs(d.val) * mult
 	if cr: return crop(m)
 	m = cv2.threshold(m.astype(np.uint8),40,255,cv2.THRESH_TOZERO)[1]
 	return m
@@ -43,16 +43,16 @@ def crop(m, left=200, top=80, right=500, bottom=400):
 if __name__ == '__main__':
 	
 	# just list of file names
-	files = sortFiles(initFiles('./out/'), start=0, end=3)
+	files = sortFiles(initFiles('./out/'), start=0, end=3, r=True)
 	imgs = []
-	for i in range(50): 
+	for i in range(len(files)): 
 		imgs.append(read(files[i], crop=False)[1])
-		# display(imgs[i], mat=True)
+		# display(imgs[i], t=100)
 
-	first_frame, last_frame, overlay = flow(imgs)
+	# first_frame, last_frame, overlay = flow(imgs)
 	
-	display(first_frame, name="first frame")
-	display(last_frame, name="last frame")
-	display(overlay, name="overlay")
+	# display(first_frame, name="first frame")
+	# display(last_frame, name="last frame")
+	# display(overlay, name="overlay")
 
-	# sparse(imgs)
+	sparse(imgs)
