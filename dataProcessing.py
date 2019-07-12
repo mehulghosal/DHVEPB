@@ -1,4 +1,5 @@
 import os, time, Data, _thread, cv2
+import matplotlib.pyplot as plt
 from os.path import isfile, join
 
 #list of files
@@ -24,10 +25,20 @@ def sortFiles(files, start=4, end=-4):
 def save(img, name):
 	cv2.imwrite(str(name),img)
 
-def display(img, name="img"):
+def display(img, name="img", t=0, mat=False):
+	if mat:
+		plt.imshow(img)
+		plt.show()
+		return
 	cv2.imshow(name, img)
-	if cv2.waitKey(0) & 0xff == 27:
+	if cv2.waitKey(t) & 0xff == 27:
 		cv2.destroyAllWindows()
+
+# gray==False: cvt2bgr
+def cvtColor(img, gray=True):
+	if gray:
+		return cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+	else: return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
 
 #appends the 130,000,000 data objects to dataList
 #and writes to output files

@@ -1,5 +1,6 @@
 import cv2, _thread
 import numpy as np
+import imreg_dft.imreg as dft
 from dataProcessing import save, display
 
 # not working exactly with a video - working with list of files
@@ -25,7 +26,7 @@ def flow(cap):
         rgb = cv2.cvtColor(hsv,cv2.COLOR_HSV2BGR)
 
         cv2.imshow('frame',rgb)
-        k = cv2.waitKey(30) & 0xff
+        k = cv2.waitKey(500) & 0xff
         if k == 27:
             break
 
@@ -38,9 +39,9 @@ def sparse(cap):
 
     # params for ShiTomasi corner detection
     feature_params = dict( maxCorners = 100,
-                           qualityLevel = 0.3,
-                           minDistance = 7,
-                           blockSize = 7)
+                           qualityLevel = 0.01,
+                           minDistance = 3,
+                           blockSize = 3)
 
     # Parameters for lucas kanade optical flow
     lk_params = dict( winSize  = (15,15),
@@ -66,8 +67,6 @@ def sparse(cap):
         # calculate optical flow
         p1, st, err = cv2.calcOpticalFlowPyrLK(old_gray, frame_gray, p0, None, **lk_params)
 
-        print(p1)
-        print(st)
         # Select good points
         good_new = p1[st==1]
         good_old = p0[st==1]
@@ -81,7 +80,7 @@ def sparse(cap):
         img = cv2.add(frame,mask)
 
         cv2.imshow('frame',img)
-        k = cv2.waitKey(30) & 0xff
+        k = cv2.waitKey(500) & 0xff
         if k == 27:
             break
 
