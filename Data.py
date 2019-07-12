@@ -9,17 +9,16 @@ class Data():
 		self.val = v
 
 	def __str__(self):
-		return str((self.t, self.lat, self.lon, self.val))
+		return ','.join((str(self.t), str(self.lat), str(self.lon), str(self.val)))
 
-	#self and other are from adjacent time frames and same lat/lon
-	# def __add__(self, other):
-	# 	return Data((self.t + other.t)/2, self.lat, self.lon, (self.val + other.val)/2)
-
-	#pass in string tuple, returns Data object
+	#pass in string tuple, returns Data object: 0,1,250,-0.00040754789
 	def fromStr(s):
-		s = s.split(", ")
-		t = int(s[0][-1:])
+		s = s.split(",")
+		t = int(s[0])
 		la = int(s[1])
 		lo = int(s[2])
-		v = float(s[3][:-1])
+		v = float(s[3])
 		return Data(t, la, lo, v)
+
+	def set_val(self, v):
+		self.val = v

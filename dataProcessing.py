@@ -9,7 +9,7 @@ dataList = []
 
 #appends datafiles as file objects to list
 #modifies gloabal var files
-def initFiles(directory, t = "r"):
+def initFiles(directory):
 	global files
 	#directory = "/home/mehulghosal/code/sciresearch/newdata"
 	files = [f for f in os.listdir(directory) if isfile(join(directory, f))]
@@ -22,7 +22,7 @@ def sortFiles(files, start=4, end=-4):
 
 # takes in a dataMap and saves it as a cv2 image
 def save(img, name):
-	cv2.imwrite("./imgs/img" + str(name) + ".png",img)
+	cv2.imwrite(str(name),img)
 
 def display(img, name="img"):
 	cv2.imshow(name, img)
@@ -35,11 +35,10 @@ def readData(files):
 	#iterates through files
 	t = time.time()
 	for fileIndex in range(len(files)):
-		# if fileIndex != 249: continue
 		file = open("./data/"+files[fileIndex], 'r')
 		print(file)
 		lines = file.readlines()
-
+		li = ''
 		outFile = open("./out/" + files[fileIndex][-7:-4] + ".txt", "w")
 		for lineIndex in range(len(lines)):
 			line = lines[lineIndex]
@@ -47,15 +46,16 @@ def readData(files):
 			#iterates through values in line
 			for valIndex in range(len(values)):
 				val = values[valIndex]
-				x = float(val[:-4])
+				x = float(val)
 				if x >= 0: continue
-				exp = 10**int(val[-3:])
-				#adding one to all indices to eliminate 0, and go up to 480
-				data = Data.Data(fileIndex + 1, lineIndex + 1, valIndex + 1, x*exp)
+				data = Data.Data(fileIndex, lineIndex, valIndex, x)
 				dataList.append(data)
-				outFile.write(str(data) + "\n")
+				li += str(data) + ' '
+			li = li[:-1] + '\n'
+		outFile.write(li[:-1])
+
 	print("time required is: " + str(time.time() - t))
-	return dataList
+	return dataList	
 
 #closes all files to prevent memory leaks
 #param is list of files
