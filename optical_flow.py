@@ -9,11 +9,11 @@ def sparse(cap):
     feature_params = dict( maxCorners = 50,
                            qualityLevel = 0.01,
                            minDistance = 2,
-                           blockSize = 7)
+                           blockSize = 3)
 
     # Parameters for lucas kanade optical flow
-    lk_params = dict( winSize  = (15,15),
-                      maxLevel = 2,
+    lk_params = dict( winSize  = (25,25),
+                      maxLevel = 3,
                       criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
 
     # Create some random colors
@@ -24,7 +24,7 @@ def sparse(cap):
     first_frame = old_frame
     old_gray = cv2.cvtColor(old_frame, cv2.COLOR_BGR2GRAY)
     p0 = cv2.goodFeaturesToTrack(old_gray, mask = None, **feature_params)
-
+    # print(len(p0))
     vector_frames = []
 
     # Create a mask image for drawing purposes
@@ -40,6 +40,8 @@ def sparse(cap):
             # Select good points
             good_new = p1[st==1]
             good_old = p0[st==1]
+
+            vector_frames.append(good_old)
 
             # draw the tracks
             for i,(new,old) in enumerate(zip(good_new,good_old)):
@@ -64,4 +66,5 @@ def sparse(cap):
     cv2.destroyAllWindows()
 
     display(img, name="last frame")
-    save(img, 'lastframe.png')
+    save(img, 'last_frame.png')
+    return vector_frames

@@ -48,4 +48,5 @@ if __name__ == '__main__':
 		imgs.append(read(files[i], crop=False)[1])
 		# display(imgs[i], t=30)
 
-	sparse(imgs)
+	vectors = sparse(imgs)
+	print(len(vectors))
