@@ -37,22 +37,15 @@ def formatMap(data, cr=False):
 
 # top bound: 200,90
 # bottom: 500,400
-def crop(m, left=200, top=80, right=500, bottom=400):
-	return m[top:bottom, left:right]
+def crop(m, left=200, top=50, right=500, bottom=400):
+	return m[top:bottom, left:right].copy()
 
 if __name__ == '__main__':
 	
-	# just list of file names
-	files = sortFiles(initFiles('./out/'), start=0, end=3, r=True)
+	files = sortFiles(initFiles('./out/'), start=0, end=3, r=True)[-110:] #only first 110 frames
 	imgs = []
 	for i in range(len(files)): 
 		imgs.append(read(files[i], crop=False)[1])
-		# display(imgs[i], t=100)
-
-	# first_frame, last_frame, overlay = flow(imgs)
-	
-	# display(first_frame, name="first frame")
-	# display(last_frame, name="last frame")
-	# display(overlay, name="overlay")
+		# display(imgs[i], t=30)
 
 	sparse(imgs)
