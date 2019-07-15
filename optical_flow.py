@@ -51,20 +51,27 @@ def sparse(cap):
                 frame = cv2.circle(frame,(a,b),5,color[i].tolist(),-1)
             img = cv2.add(frame,mask)
 
-            cv2.imshow('frame',img)
-            k = cv2.waitKey(500) & 0xff
-            if k == 27:
-                break
+            # to display and debug, un-comment lines 55 & 63-65
+            # display(img, t=500)
 
-            # Now update the previous frame and previous points
             old_gray = frame_gray.copy()
             p0 = good_new.reshape(-1,1,2)
     except Exception as e:
         print(e)
         print(p1)
 
-    cv2.destroyAllWindows()
+    # cv2.destroyAllWindows()
+    # display(img, name="last frame")
+    # save(img, 'last_frame.png')
+    print("vectors calculated")
+    vector_frames = resize(vector_frames)
+    return vector_frames, np.swapaxes(vector_frames, 0, 1)
 
-    display(img, name="last frame")
-    save(img, 'last_frame.png')
-    return vector_frames
+# takes list of 2-d np arrays
+# condenses into one 3-d np array
+def resize(vectors):
+    l = len(vectors[0])
+    for v in vectors:
+        if not len(v) == l:
+            v.resize(l, 2, refcheck=False)
+    return np.stack(vectors)
