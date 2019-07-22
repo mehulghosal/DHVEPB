@@ -42,31 +42,48 @@ def crop(m, left=200, top=50, right=500, bottom=400):
 	return m[top:bottom, left:right].copy()
 
 # return inst velocities from frame to next
+# TODO: RETHINK THIS 
 def calc_inst_vel(vectors):
-	vectors = vectors[1:] # take out first frame to get even number
-	inst_vels = []
+	if not len(vectors)%2: vectors = vectors[:-1] # if odd: take out last frame to get even number
+
+	l = len()
+	inst_vels = np.empty((l, 2))
+
 	for i in range(0, len(vectors)-1, 2):
 		x1 = vectors[i]
 		x2 = vectors[i+1]
-		delta = (x2-x1)/50 * 110 * 1000 # converting from .2 deg -> meters
+		if not(x1.all() and x2.all()): continue
+		delta = (np.linalg.norm(x2-x1)) # converting from .2 deg -> meters
 		inst_vels.append(delta/180) #converting 3 mins -> seconds
-	return np.swapaxes(np.array(inst_vels), 0, 1) #in m/s
+	return np.array(inst_vels) #in m/s
 
-# take tracks and return avg velocities
 # vectors.shape = (numcorners, numframes, 2)
-# returns 1-d array with avg vels of each hobject
+# returns avg vels as mag, angle
 def calc_avg_vel(vectors):
-	avg_vels = np.zeros(50)
+	l = len(vectors)
+	avg_vels = np.empty((l, 2))
+
+	for i in range(l):
+		a = vectors[i]
+		x = np.delete(a[:,1], np.where(a[:,1] == 0))
+		y = np.delete(a[:,0], np.where(a[:,0] == 0))
+		dx = x[len(x)-1] - x[0]
+		dy = x[len(y)-1] - x[0]
+		avg_vels[i, 0] = np.linalg.norm([dx, dy])/len(vectors[0])
+		avg_vels[i, 1] = np.degrees(np.arctan([dx, dy]))[0]
+
+	return avg_vels
+
 
 if __name__ == '__main__':
 	
 	files = sortFiles(initFiles('./out/'), start=0, end=3, r=True)[-110:] #only first 110 frames
 	imgs = []
-	for i in range(30): 
+	for i in range(len(files)): 
 		imgs.append(read(files[i], crop=False)[1])
 		# display(imgs[i], t=30)
 
 	# vectors is list of frames containing the points in the vectors
 	# tracks is a list of points tracked
 	vectors, tracks = sparse(imgs)
-	inst_velocities = calc_inst_vel(vectors)
+	avg_vels = calc_avg_vel(tracks)
