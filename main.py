@@ -55,6 +55,7 @@ def calc_inst_vel(vectors):
 		if not(x1.all() and x2.all()): continue
 		delta = (np.linalg.norm(x2-x1)) # converting from .2 deg -> meters
 		inst_vels.append(delta/180) #converting 3 mins -> seconds
+	open("inst_vel.txt", "w").write(np.array(inst_vels))
 	return np.array(inst_vels) #in m/s
 
 # vectors.shape = (numcorners, numframes, 2)
@@ -72,7 +73,12 @@ def calc_avg_vel(vectors):
 		avg_vels[i, 0] = np.linalg.norm([dx, dy])/len(vectors[0])
 		avg_vels[i, 1] = np.degrees(np.arctan([dx, dy]))[0]
 
+	open("avg_vel.txt", "w").write(avg_vels)
 	return avg_vels
+
+# project the instantaneous vectors onto the average vector
+def project():
+	pass
 
 
 if __name__ == '__main__':
