@@ -4,3 +4,7 @@ out/
 __pycache__/
 *.pyc
 imgs/
+avg_vel.txt
+avg_vel_1.txt
+avg_vel_r.txt
+
