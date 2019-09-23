@@ -69,9 +69,11 @@ def calc_avg_vel(vectors):
 		x = np.delete(a[:,1], np.where(a[:,1] == 0))
 		y = np.delete(a[:,0], np.where(a[:,0] == 0))
 		dx = x[len(x)-1] - x[0]
-		dy = x[len(y)-1] - x[0]
-		avg_vels[i, 0] = np.linalg.norm([dx, dy])/len(vectors[0])
-		avg_vels[i, 1] = np.degrees(np.arctan([dx, dy]))[0]
+		dy = y[len(y)-1] - y[0]
+		avg_vels[i, 0] = dx
+		avg_vels[i, 1] = dy
+		# avg_vels[i, 0] = np.linalg.norm([dx, dy])/len(vectors[0])
+		# avg_vels[i, 1] = np.degrees(np.arctan([dx, dy]))[0]
 
 	open("avg_vel.txt", "w").write(str(avg_vels))
 	return avg_vels
@@ -83,13 +85,13 @@ def project():
 
 def graph_avgs(V):
 	origin = [0], [0]
-	plt.quiver(*origin, V[:,0], V[:,1], scale=.0005)
+	plt.quiver(*origin, V[:,0], V[:,1], units='xy')
 	plt.show()
 
 
 if __name__ == '__main__':
 	
-	files = sortFiles(initFiles('./out/'), start=0, end=3, r=False)[-110:] #only first 110 frames
+	files = sortFiles(initFiles('./out/'), start=0, end=3, r=True)[-110:] #only first 110 frames
 	imgs = []
 	for i in range(len(files)): 
 		imgs.append(read(files[i], crop=False)[1])
