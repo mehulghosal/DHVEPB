@@ -1,4 +1,4 @@
-## Deriving Horizontal Velocities of Equatorial Plasma Bubbles
+## Using Optical Flow to Derive Horizontal Velocities of Equatorial Plasma Bubbles
 * goal of this project is to find horizontal drift velocities based on differences in total electron content over time
 * acknowledgements to Dr. R. Pradipta for support and providing the data & Mrs. Croce and Dr. Arrigoni for additional support
 
@@ -11,14 +11,11 @@
 
 * note: data in input & output files not published on github because of size limitations
 
-### data processing
-* in dataProcessing.py, raw data is read in and converted to Data objects
-* these Data objects are then pruned, and any with a value == 0 are deleted
-* printed to files coresponding to input files in /output --> for later use
-
-### analyzing
-* read in data objects again from output
-* generate images basde on files
+### analysis
+* read in data as consecutive image frames
 * using optical flow to give motion vectors to images ~ treat like a video
+* use output vectors of depletions (figure 1) to calculate average velocities of moving depletions
 
-<img src="last_frame.png">
+<img src="last_frame.png"> 
+** Figure 1 **
+These are the output vectors from optical flow. Each individual arrow represents the path of a detected feature. 50 features were detected, some of which belong to the same depletion.
