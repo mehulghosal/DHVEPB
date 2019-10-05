@@ -46,10 +46,10 @@ def crop(m, left=200, top=50, right=500, bottom=400):
 def calc_inst_vel(vectors):
 	if not len(vectors)%2: vectors = vectors[:-1] # if odd: take out last frame to get even number
 
-	l = len()
+	l = len(vectors)
 	inst_vels = np.empty((l, 2))
 
-	for i in range(0, len(vectors)-1, 2):
+	for i in range(0, len(vectors)-1):
 		x1 = vectors[i]
 		x2 = vectors[i+1]
 		if not(x1.all() and x2.all()): continue

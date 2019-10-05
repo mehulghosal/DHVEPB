@@ -32,7 +32,7 @@ def display(img, name="img", t=0, mat=False):
 		return
 	cv2.imshow(name, img)
 	if cv2.waitKey(t) & 0xff == 27:
-		cv2.destroyAllWindows()
+		cv2.destroyAllWindows()co
 
 # gray==False: cvt2bgr
 def cvtColor(img, gray=True):
@@ -102,6 +102,3 @@ def imdumb(l):
 		fi = open('./out/out' + y + ".txt", "w")
 		fi.write(a[i])
 
-if __name__ == '__main__':
-	files = sortFiles(initFiles('./data/'), start=-7, end=-4)
-	readData(files)
