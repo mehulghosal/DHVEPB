@@ -32,7 +32,7 @@ def display(img, name="img", t=0, mat=False):
 		return
 	cv2.imshow(name, img)
 	if cv2.waitKey(t) & 0xff == 27:
-		cv2.destroyAllWindows()co
+		cv2.destroyAllWindows()
 
 # gray==False: cvt2bgr
 def cvtColor(img, gray=True):

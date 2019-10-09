@@ -25,7 +25,7 @@ def read(file, crop=False):
 #formats a list of data objects into a 2d map
 #returns 2d list
 def formatMap(data, cr=False):
-	m = np.empty([551, 501, 3], dtype=np.float64)
+	m = np.zeros([551, 501, 3], dtype=np.float64)
 	for d in data:
 		if abs(d.val)>50: 
 			d.set_val(0)
@@ -42,27 +42,27 @@ def crop(m, left=200, top=50, right=500, bottom=400):
 	return m[top:bottom, left:right].copy()
 
 # return inst velocities from frame to next
-# TODO: RETHINK THIS 
+# vectors.shape -> 50, 109, 2
 def calc_inst_vel(vectors):
-	if not len(vectors)%2: vectors = vectors[:-1] # if odd: take out last frame to get even number
+	l = vectors.shape
+	if not l[1]%2: vectors = vectors[:,:-1,:] # if odd: take out last frame to get even number
+	inst_vels = np.zeros((l[0], l[1], 2))
+	all_v = []
 
-	l = len(vectors)
-	inst_vels = np.empty((l, 2))
+	for artifact in vectors:
+		inst_vel = np.zeros(l[1], 2)
 
-	for i in range(0, len(vectors)-1):
-		x1 = vectors[i]
-		x2 = vectors[i+1]
-		if not(x1.all() and x2.all()): continue
-		delta = (np.linalg.norm(x2-x1)) # converting from .2 deg -> meters
-		inst_vels.append(delta/180) #converting 3 mins -> seconds
-	open("inst_vel.txt", "w").write(np.array(inst_vels))
-	return np.array(inst_vels) #in m/s
+		# ignore last frame bc theres nowhere it goes
+		for i in range(len(artifact) - 1):
+			pass
+		
+
 
 # vectors.shape = (numcorners, numframes, 2)
 # returns avg vels as mag, angle
 def calc_avg_vel(vectors):
 	l = len(vectors)
-	avg_vels = np.empty((l, 2))
+	avg_vels = np.zeros((l, 2))
 
 	for i in range(l):
 		a = vectors[i]
@@ -85,7 +85,7 @@ def project():
 
 def graph_avgs(V):
 	origin = [0], [0]
-	plt.quiver(*origin, V[:,0], V[:,1], units='xy')
+	plt.quiver(*origin, V[:,1], V[:,0], units='xy')
 	plt.show()
 
 
@@ -102,3 +102,4 @@ if __name__ == '__main__':
 	vectors, tracks = sparse(imgs)
 	avg_vels = calc_avg_vel(tracks)
 	graph_avgs(avg_vels)
+	inst_vels = calc_inst_vel(tracks)
