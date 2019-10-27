@@ -58,15 +58,25 @@ def calc_inst_vel(vectors):
 		inst_vels.append(inst_vel)
 	return np.asarray(inst_vels)
 
-def graph_inst(V):
+def graph_inst(V, ind = -1):
 	i = 0
-	for artifact in V:
-		origin = [0], [0]
+	origin = [0], [0]
+
+	if not ind == -1:
+		artifact = V[ind]
 		plt.quiver(*origin, artifact[:,1], artifact[:,0], units='xy')
-		plt.savefig("./inst/inst_" + str(i)+'.png')
+		plt.xlabel('X component', fontsize=18)
+		plt.ylabel('Y component', fontsize=18)
+
+		plt.show()
+		return
+
+	for artifact in V:
+		plt.quiver(*origin, artifact[:,1], artifact[:,0], units='xy')
+		plt.show()
 		i+=1
 
-# vectors.shape = (numcorners, numframes, 2)
+# vectors.shape = (numcorners, 2)
 # returns avg vels as mag, angle
 def calc_avg_vel(vectors):
 	l = len(vectors)
@@ -78,24 +88,27 @@ def calc_avg_vel(vectors):
 		y = np.delete(a[:,0], np.where(a[:,0] == 0))
 		dx = x[len(x)-1] - x[0]
 		dy = y[len(y)-1] - y[0]
-		avg_vels[i, 0] = dx
-		avg_vels[i, 1] = dy
+		avg_vels[i, 0] = dx/l
+		avg_vels[i, 1] = dy/l
 		# avg_vels[i, 0] = np.linalg.norm([dx, dy])/len(vectors[0])
 		# avg_vels[i, 1] = np.degrees(np.arctan([dx, dy]))[0]
 
+	# avg = (0.5356230468750, -0.07538294677734375)
+	avg = sum(avg_vels[:, 1])/l, sum(avg_vels[:, 0])/l
+
 	# open("avg_vel.txt", "w").write(str(avg_vels))
-	return avg_vels
+	return avg_vels, avg
 
 # project the instantaneous vectors onto the average vector
 def project(avg, inst):
 	pass
 
-
 def graph_avgs(V):
 	origin = [0], [0]
 	plt.quiver(*origin, V[:,1], V[:,0], units='xy')
+	plt.xlabel('X component', fontsize=18)
+	plt.ylabel('Y component', fontsize=18)
 	plt.show()
-
 
 if __name__ == '__main__':
 	
@@ -108,7 +121,9 @@ if __name__ == '__main__':
 	# vectors is list of frames containing the points in the vectors
 	# tracks is a list of points tracked
 	vectors, tracks = sparse(imgs)
-	avg_vels = calc_avg_vel(tracks)
-	graph_avgs(avg_vels)
+
+	avg_vels, avg = calc_avg_vel(tracks)
 	inst_vels = calc_inst_vel(tracks)
-	graph_inst(inst_vels)
+
+	print(avg)
+	graph_avgs(avg_vels)
