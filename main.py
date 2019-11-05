@@ -58,6 +58,17 @@ def calc_inst_vel(vectors):
 		inst_vels.append(inst_vel)
 	return np.asarray(inst_vels)
 
+# V.shape -> 109, 2 
+def integrate(V):
+	o = [0, 0]
+	displacements = np.zeros((109, 2))
+	for i in range(1, len(V)):
+		v = V[i]
+		o[0] += v[0]
+		o[1] += v[1]
+		# TODO try to figure this out lol
+
+
 def graph_inst(V, ind = -1):
 	i = 0
 	origin = [0], [0]
@@ -75,6 +86,7 @@ def graph_inst(V, ind = -1):
 		plt.quiver(*origin, artifact[:,1], artifact[:,0], units='xy')
 		plt.show()
 		i+=1
+
 
 # vectors.shape = (numcorners, 2)
 # returns avg vels as mag, angle
@@ -120,10 +132,9 @@ if __name__ == '__main__':
 
 	# vectors is list of frames containing the points in the vectors
 	# tracks is a list of points tracked
-	vectors, tracks = sparse(imgs)
+	vectors, tracks, points = sparse(imgs)
 
 	avg_vels, avg = calc_avg_vel(tracks)
 	inst_vels = calc_inst_vel(tracks)
 
-	print(avg)
-	graph_avgs(avg_vels)
+	

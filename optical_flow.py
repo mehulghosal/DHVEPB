@@ -24,18 +24,23 @@ def sparse(cap):
     first_frame = old_frame
     old_gray = cv2.cvtColor(old_frame, cv2.COLOR_BGR2GRAY)
     p0 = cv2.goodFeaturesToTrack(old_gray, mask = None, **feature_params)
-    # print(len(p0))
+    points = []
     vector_frames = []
+    errors = []
 
     # Create a mask image for drawing purposes
     mask = np.zeros_like(old_frame)
     try:
         for i in range(len(cap)):
+
             frame = cap.pop()
             frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
             # calculate optical flow
             p1, st, err = cv2.calcOpticalFlowPyrLK(old_gray, frame_gray, p0, None, **lk_params)
+            
+            points.append(p0)
+            errors.append(err)
 
             # Select good points
             good_new = p1[st==1]
@@ -58,14 +63,13 @@ def sparse(cap):
             p0 = good_new.reshape(-1,1,2)
     except Exception as e:
         print(e)
-        print(p1)
 
     # cv2.destroyAllWindows()
     # display(img, name="last frame")
     # save(img, 'last_frame.png')
     print("vectors calculated")
     vector_frames = resize(vector_frames)
-    return vector_frames, np.swapaxes(vector_frames, 0, 1)
+    return vector_frames, np.swapaxes(vector_frames, 0, 1), points
 
 # takes list of 2-d np arrays
 # condenses into one 3-d np array
