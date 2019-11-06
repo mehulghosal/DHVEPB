@@ -18,5 +18,5 @@
 * use output vectors of depletions (figure 1) to calculate average velocities of moving depletions
 
 <img src="last_frame.png"> 
-**Figure 1**
+** Figure 1 **
 These are the output vectors from optical flow. Each individual arrow represents the path of a detected feature. 50 features were detected, some of which belong to the same depletion.
