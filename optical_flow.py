@@ -69,7 +69,7 @@ def sparse(cap):
     # save(img, 'last_frame.png')
     print("vectors calculated")
     vector_frames = resize(vector_frames)
-    return vector_frames, np.swapaxes(vector_frames, 0, 1), points
+    return vector_frames, np.swapaxes(vector_frames, 0, 1)
 
 # takes list of 2-d np arrays
 # condenses into one 3-d np array

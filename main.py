@@ -58,16 +58,6 @@ def calc_inst_vel(vectors):
 		inst_vels.append(inst_vel)
 	return np.asarray(inst_vels)
 
-# V.shape -> 109, 2 
-def integrate(V):
-	o = [0, 0]
-	displacements = np.zeros((109, 2))
-	for i in range(1, len(V)):
-		v = V[i]
-		o[0] += v[0]
-		o[1] += v[1]
-		# TODO try to figure this out lol
-
 
 def graph_inst(V, ind = -1):
 	i = 0
@@ -132,9 +122,10 @@ if __name__ == '__main__':
 
 	# vectors is list of frames containing the points in the vectors
 	# tracks is a list of points tracked
-	vectors, tracks, points = sparse(imgs)
+	vectors, tracks = sparse(imgs)
 
 	avg_vels, avg = calc_avg_vel(tracks)
 	inst_vels = calc_inst_vel(tracks)
+
 
 	
