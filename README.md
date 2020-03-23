@@ -1,5 +1,6 @@
 ## Using Optical Flow to Derive Horizontal Velocities of Equatorial Plasma Bubbles
 * goal of this project is to find horizontal drift velocities based on differences in total electron content over time
+* [read my paper](https://drive.google.com/file/d/18pqZp8KGTuVQ5ie9MKiChWhCFsEj7MfI/view?usp=sharing "Using optical flow to derive horizontal velocities of equatorial plasma bubbles")
 * acknowledgements to Dr. R. Pradipta for support and providing the data & Mrs. Croce and Dr. Arrigoni for additional support
 
 ### data:
